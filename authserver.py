@@ -24,14 +24,7 @@ def auth():
         print("Unsupported device:", device)
         return jsonify({"status": "rejected", "reason": "JS Auth Server error: 0010 \nUnsupported Device"})
 
-    try:
-        js_response = requests.post("http://127.0.0.1:3000/validate", json=data).json()
-        if not js_response.get("valid"):
-            print("JS validation failed:", token)
-            return jsonify({"status": "rejected", "reason": "JS Auth Server error: 0012 \nToken Validation Failed"})
-    except Exception as e:
-        print("JS validation error:", e)
-        return jsonify({"status": "rejected", "reason": "JS Auth Server error: 0013 \nUnable to Validate Token/ChallengeToken"})
+print("Skipping JS validation for token:", token)
 
     challenge = generate_challenge()
     ISSUED_CHALLENGES[token] = (challenge, time.time())
@@ -75,3 +68,4 @@ if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
+
