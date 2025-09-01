@@ -24,7 +24,8 @@ def auth():
         print("Unsupported device:", device)
         return jsonify({"status": "rejected", "reason": "JS Auth Server error: 0010 \nUnsupported Device"})
 
-print("Skipping JS validation for token:", token)
+    # Skipping JS validation for Render deployment
+    print("Skipping JS validation for token:", token)
 
     challenge = generate_challenge()
     ISSUED_CHALLENGES[token] = (challenge, time.time())
@@ -64,8 +65,12 @@ def challenge():
     print("Token validated successfully:", token)
     return jsonify({"status": "success"})
 
+# Optional: simple GET route to check server in browser
+@app.route("/", methods=["GET"])
+def index():
+    return "Auth server is live!"
+
 if __name__ == "__main__":
     import os
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-
